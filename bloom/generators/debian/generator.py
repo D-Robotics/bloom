@@ -414,7 +414,9 @@ def generate_substitutions_from_package(
     # Use the time stamp to set the date strings
     stamp = datetime.datetime.now(tz.tzlocal())
     data['Date'] = stamp.strftime('%a, %d %b %Y %T %z')
-    data['YYYY'] = stamp.strftime('%Y')
+    data['DYMD'] = stamp.strftime('%Y%m%d')
+    data['DHMS'] = stamp.strftime('%H%M%S')
+
     # Maintainers
     maintainers = []
     for m in package.maintainers:

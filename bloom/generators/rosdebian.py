@@ -51,7 +51,7 @@ from bloom.rosdistro_api import get_non_eol_distros_prompt
 class RosDebianGenerator(DebianGenerator):
     title = 'rosdebian'
     description = "Generates debians tailored for the given rosdistro"
-    default_install_prefix = '/opt/ros/'
+    default_install_prefix = '/opt/tros/'
 
     def prepare_arguments(self, parser):
         # Add command line arguments for this generator
@@ -149,7 +149,7 @@ class RosDebianGenerator(DebianGenerator):
 
 
 def rosify_package_name(name, rosdistro):
-    return 'ros-{0}-{1}'.format(rosdistro, name)
+    return 'tros-{0}-{1}'.format(rosdistro, name)
 
 
 def get_subs(pkg, os_name, os_version, ros_distro, deb_inc, native):
