@@ -149,21 +149,41 @@ class RosDebianGenerator(DebianGenerator):
 
 
 def rosify_package_name(name, rosdistro):
-    return 'tros-{0}-{1}'.format(rosdistro, name)
+    if rosdistro in ('foxy'):
+        return 'tros-{0}'.format(name)
+    else:
+        return 'ros-{0}-{1}'.format(rosdistro, name)
 
 
 def get_subs(pkg, os_name, os_version, ros_distro, deb_inc, native):
+    installation_prefix = RosDebianGenerator.default_install_prefix
+    if ros_distro not in ('foxy'):
+        installation_prefix = RosDebianGenerator.default_install_prefix + ros_distro
+
     # No fallback_resolver provided because peer packages not considered.
     subs = generate_substitutions_from_package(
         pkg,
         os_name,
         os_version,
         ros_distro,
-        RosDebianGenerator.default_install_prefix + ros_distro,
+        installation_prefix,
         deb_inc=deb_inc,
         native=native
     )
     subs['Package'] = rosify_package_name(subs['Package'], ros_distro)
+
+    # ROS 2 specific bloom extensions.
+    ros2_distros = [
+        name for name, values in get_index().distributions.items()
+        if values.get('distribution_type') == 'ros2']
+    if ros_distro in ros2_distros:
+        # Add ros-workspace package as a dependency to any package other
+        # than ros_workspace and its dependencies.
+        if pkg.name not in ['ament_cmake_core', 'ament_package', 'ros_workspace']:
+            workspace_pkg_name = rosify_package_name('ros-workspace', ros_distro)
+            subs['BuildDepends'].append(workspace_pkg_name)
+            subs['Depends'].append(workspace_pkg_name)
+
     return subs
 
 
