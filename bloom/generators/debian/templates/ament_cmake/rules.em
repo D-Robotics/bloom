@@ -35,7 +35,9 @@ override_dh_auto_configure:
 		-DCMAKE_INSTALL_PREFIX="@(InstallationPrefix)" \
 		-DAMENT_PREFIX_PATH="@(InstallationPrefix)" \
 		-DCMAKE_PREFIX_PATH="@(InstallationPrefix)" \
-		$(BUILD_TESTING_ARG)
+		$(BUILD_TESTING_ARG) \
+		-DBUILD_HBMEM=ON \
+		-DPLATFORM_$(PLATFORM)=ON
 
 override_dh_auto_build:
 	# In case we're installing to a non-standard location, look for a setup.sh
@@ -57,7 +59,8 @@ override_dh_shlibdeps:
 	# in the install tree and source it.  It will set things like
 	# CMAKE_PREFIX_PATH, PKG_CONFIG_PATH, and PYTHONPATH.
 	if [ -f "@(InstallationPrefix)/setup.sh" ]; then . "@(InstallationPrefix)/setup.sh"; fi && \
-	dh_shlibdeps -l$(CURDIR)/debian/@(Package)/@(InstallationPrefix)/lib/
+	dh_shlibdeps -l$(CURDIR)/debian/@(Package)/@(InstallationPrefix)/lib/ \
+		--dpkg-shlibdeps-params=--ignore-missing-info
 
 override_dh_auto_install:
 	# In case we're installing to a non-standard location, look for a setup.sh
