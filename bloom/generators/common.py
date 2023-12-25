@@ -35,6 +35,7 @@ from __future__ import print_function
 import pkg_resources
 import sys
 import traceback
+import os
 
 from bloom.logging import debug
 from bloom.logging import error
@@ -154,10 +155,13 @@ def package_conditional_context(ros_distro):
         error("Bloom cannot cope with python_version '{0}'".format(
             python_version), exit=True)
 
+    platform = os.environ.get('PLATFORM', 'X3')
+
     return {
             'ROS_VERSION': ros_version,
             'ROS_DISTRO': ros_distro,
             'ROS_PYTHON_VERSION': ros_python_version,
+            'PLATFORM': platform,
             }
 
 

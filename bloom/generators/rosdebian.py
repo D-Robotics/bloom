@@ -150,7 +150,10 @@ class RosDebianGenerator(DebianGenerator):
 
 def rosify_package_name(name, rosdistro):
     if rosdistro in ('foxy'):
-        return 'tros-{0}'.format(name)
+        if name == 'tros':
+            return 'tros'
+        else:
+            return 'tros-{0}'.format(name)
     else:
         return 'ros-{0}-{1}'.format(rosdistro, name)
 
