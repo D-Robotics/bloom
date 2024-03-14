@@ -155,7 +155,10 @@ def rosify_package_name(name, rosdistro):
         else:
             return 'tros-{0}'.format(name)
     else:
-        return 'tros-{0}-{1}'.format(rosdistro, name)
+        if name == 'tros':
+            return 'tros-{0}'.format(rosdistro)
+        else:
+            return 'tros-{0}-{1}'.format(rosdistro, name)
 
 
 def get_subs(pkg, os_name, os_version, ros_distro, deb_inc, native):
