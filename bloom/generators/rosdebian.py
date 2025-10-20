@@ -112,7 +112,7 @@ class RosDebianGenerator(DebianGenerator):
                 ]
 
                 # Connext was changed to a new rmw that doesn't require typesupport after Foxy
-                if self.rosdistro in ('bouncy', 'crystal', 'dashing', 'eloquent', 'foxy', 'humble'):
+                if self.rosdistro in ('bouncy', 'crystal', 'dashing', 'eloquent', 'foxy', 'humble', 'jazzy'):
                     ROS2_VENDOR_TYPESUPPORT_DEPENDENCIES.extend([
                         'rosidl-typesupport-connext-c',
                         'rosidl-typesupport-connext-cpp',
