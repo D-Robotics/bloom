@@ -44,13 +44,8 @@ import sys
 import traceback
 import textwrap
 
-# Python 2/3 support.
-try:
-    from configparser import SafeConfigParser
-except ImportError:
-    from ConfigParser import SafeConfigParser
 from dateutil import tz
-from distutils.version import LooseVersion
+from packaging.version import Version
 from time import strptime
 
 from bloom.generators import BloomGenerator
@@ -281,6 +276,8 @@ def generate_substitutions_from_package(
         pass
     elif build_type == 'cmake':
         pass
+    elif build_type == 'meson':
+        pass
     elif build_type == 'ament_cmake':
         pass
     elif build_type == 'ament_python':
@@ -305,7 +302,7 @@ def generate_substitutions_from_package(
     # Changelog
     if releaser_history:
         sorted_releaser_history = sorted(releaser_history,
-                                         key=lambda k: LooseVersion(k), reverse=True)
+                                         key=lambda k: Version(k), reverse=True)
         sorted_releaser_history = sorted(sorted_releaser_history,
                                          key=lambda k: strptime(releaser_history.get(k)[0], '%a %b %d %Y'),
                                          reverse=True)
@@ -447,7 +444,7 @@ def get_package_from_branch(branch):
 def rpmify_string(value):
     markup_remover = re.compile(r'<.*?>')
     value = markup_remover.sub('', value)
-    value = re.sub('\s+', ' ', value)
+    value = re.sub(r'\s+', ' ', value)
     value = '\n'.join([v.strip() for v in
                       textwrap.TextWrapper(width=80, break_long_words=False, replace_whitespace=False).wrap(value)])
     return value

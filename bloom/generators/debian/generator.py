@@ -45,9 +45,9 @@ import traceback
 
 # Python 2/3 support.
 try:
-    from configparser import SafeConfigParser
+    from configparser import ConfigParser
 except ImportError:
-    from ConfigParser import SafeConfigParser
+    from ConfigParser import SafeConfigParser as ConfigParser
 from dateutil import tz
 from packaging.version import parse as parse_version
 
@@ -389,6 +389,8 @@ def generate_substitutions_from_package(
         pass
     elif build_type == 'cmake':
         pass
+    elif build_type == 'meson':
+        pass
     elif build_type == 'ament_cmake':
         pass
     elif build_type == 'ament_python':
@@ -397,7 +399,7 @@ def generate_substitutions_from_package(
         setup_cfg_path = os.path.join(package_path, 'setup.cfg')
         data['pass_install_scripts'] = True
         if os.path.isfile(setup_cfg_path):
-            setup_cfg = SafeConfigParser()
+            setup_cfg = ConfigParser()
             setup_cfg.read([setup_cfg_path])
             if (
                     setup_cfg.has_option('install', 'install-scripts') or
@@ -605,7 +607,7 @@ def get_package_from_branch(branch):
 def debianize_string(value):
     markup_remover = re.compile(r'<.*?>')
     value = markup_remover.sub('', value)
-    value = re.sub('\s+', ' ', value)
+    value = re.sub(r'\s+', ' ', value)
     value = value.strip()
     return value
 
